@@ -5,8 +5,13 @@ require 'json'
 
 require_relative 'policy'
 
-$redis = Redis.new
-$policy = Policy.new
+ENV["REDIS_URL"] ||= ENV["REDISTOGO_URL"]
+ENV["REDIS_URL"] ||= "redis://localhost:6379"
+uri = URI.parse(ENV["REDIS_URL"])
+$redis = Redis.new(:host => uri.host, :port => uri.port, :password => uri.password)
+if (db_number = uri.path[1..-1]) && !db_number.blank?
+  $redis.select(db_number.to_i)
+end
 
 get '/' do
   redirect '/index.html'

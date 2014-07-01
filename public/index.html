@@ -13,7 +13,8 @@ $.get("/recent", function(graphs) {
     x.appendTo(document.body)
     x.epoch({
       type: 'time.line',
-      data: graphspec.series
+      data: graphspec.series,
+      axes: ['right', 'bottom']
     });
 
   })
